@@ -5,11 +5,20 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import createDebounce from 'redux-debounced';
+
+// App reducers
 import calculatorReducer from './Calculator/redux';
 
+
+// create a store that has redux-debounced middleware enabled 
+const createStoreWithMiddleware = applyMiddleware(
+    createDebounce()
+  )(createStore);
+
 const rootReducer = combineReducers({ calculator: calculatorReducer });
-const store = createStore(rootReducer);
+const store = createStoreWithMiddleware(rootReducer);
 
 const Root = () => <Provider store={store}><App /></Provider>;
 

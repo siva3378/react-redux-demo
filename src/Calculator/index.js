@@ -2,36 +2,46 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from './redux';
-import Speed from './Speed';
+import { FormWrapper, InputField, Divider, History } from '../components';
+
 import './styles.css';
 
 class Calculator extends Component {
+  
+  onChangeHandler(key, value) {
+    this.props.updateValue(key, value);
+    this.props.calculateSpeed();
+  }
   render() {
+    
+    const {distance, time, speed, history } = this.props.calculator;
+
     return (
       <div className="outer">
-        <div className="container">
-          Solve for:
-          <select onChange={e => this.props.changeMode(e.target.value)}>
-            <option value="speed">Speed</option>
-            <option value="time">Time</option>
-            <option value="distance">Distance</option>
-          </select>
-
-          <Speed
-            {...this.props.calculator}
-            changeDistance={this.props.changeDistance}
-            changeTime={this.props.changeTime}
+        <FormWrapper>
+          <InputField 
+            label="Distance"
+            units="miles"
+            value={Number(distance)}
+            onChange={(val) => this.onChangeHandler('distance', val)}
           />
-        </div>
+          <Divider />
+          <InputField
+            label="Time"
+            units="hours"
+            value={Number(time)}
+            onChange={(val) => this.onChangeHandler('time', val)} />
+        </FormWrapper>
+        <FormWrapper>
+          <h1>Speed = {speed}</h1>
+        </FormWrapper>
+        <History data={history} />
       </div>
     );
   }
 }
 
 Calculator.propTypes = {
-  changeDistance: propTypes.function,
-  changeTime: propTypes.function,
-  calculator: propTypes.object
 }
 
 const mapStateToProps = state => ({ calculator: state.calculator });

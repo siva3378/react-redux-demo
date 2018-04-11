@@ -1,54 +1,55 @@
-const CHANGE_DISTANCE = 'CHANGE_DISTANCE';
-const CHANGE_TIME = 'CHANGE_TIME';
-const CHANGE_MODE = 'CHANGE_MODE';
-
-export const changeDistance = (value) => ({
-  type: CHANGE_DISTANCE,
-  value
-});
-
-export const changeTime = (value) => ({
-  type: CHANGE_TIME,
-  value
-});
-
-export const changeMode = (value) => ({
-  type: CHANGE_MODE,
-  value
-});
-
 const INITIAL_STATE = {
-  mode: 'speed',
-  distance: 0,
-  speed: 0,
-  time: 0
+  distance: 10,
+  time: 10,
+  speed: 1, 
+  history: [],
+  errorText: {},
+};
+
+// Action Types
+const UPDATE = 'app/calculator/UPDATE';
+const CALCULATE = 'app/calculator/CALCULATE';
+
+// Action Creators
+export function updateValue(key, value) {
+  const payload = { 
+    [key]: value,
+  };
+  return {
+    type: UPDATE,
+    payload
+  };
 }
 
+export function calculateSpeed() {
+  return {
+    type: CALCULATE,
+    meta: {
+      debounce: {
+        time: 1000
+      }
+    }
+  };
+}
+
+
+// Reducer
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case CHANGE_DISTANCE: {
-      return {
-        ...state,
-        distance: Number(action.value),
-        speed: Number(action.value) / state.time
-      }
+    case UPDATE: {
+      return Object.assign({}, state, action.payload);
     }
+    case CALCULATE: {
+      
+      const {distance, time } = state;
+      const speed = Number(distance / time);
 
-    case CHANGE_TIME: {
-      return {
-        ...state,
-        time: Number(action.value),
-        speed: Number(state.distance) / Number(action.value)
-      }
-    }
+      return Object.assign({}, state, {
+        speed: Number(distance/time),
+        history: state.history.concat({distance, time, speed})
+      });
 
-    case CHANGE_MODE: {
-      return {
-        ...state,
-        mode: action.value
-      }
     }
-    
     default: {
       return state;
     }

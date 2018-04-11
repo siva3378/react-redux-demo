@@ -13,7 +13,9 @@ const INVALID = 'app/calculator/INVALID';
 
 // Action Creators
 export function updateValue(key, value) {
-  if (isNaN(value)) {
+  const isInvalid = isNaN(value) || value === '' || value === '0';
+
+  if (isInvalid) {
     return {
       type: INVALID,
       payload: { [key]: value }

@@ -13,7 +13,7 @@ const CALCULATE = 'app/calculator/CALCULATE';
 // Action Creators
 export function updateValue(key, value) {
   const payload = { 
-    [key]: value,
+    [key]: Number(value),
   };
   return {
     type: UPDATE,
@@ -26,29 +26,26 @@ export function calculateSpeed() {
     type: CALCULATE,
     meta: {
       debounce: {
-        time: 1000
+        time: 200
       }
     }
   };
 }
 
-
 // Reducer
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UPDATE: {
-      return Object.assign({}, state, action.payload);
+      return { ...state, ...action.payload };
     }
     case CALCULATE: {
-      
-      const {distance, time } = state;
+      const { distance, time } = state;
       const speed = Number(distance / time);
 
-      return Object.assign({}, state, {
-        speed: Number(distance/time),
-        history: state.history.concat({distance, time, speed})
-      });
-
+      return { ...state,
+        speed: Number(distance / time),
+        history: [ { distance, time, speed }, ...state.history.slice(0, 4) ]
+      }
     }
     default: {
       return state;

@@ -13,8 +13,7 @@ class Calculator extends Component {
     this.props.calculateSpeed();
   }
   render() {
-    
-    const {distance, time, speed, history } = this.props.calculator;
+    const { distance, time, speed, history, error } = this.props.calculator;
 
     return (
       <div className="outer">
@@ -22,15 +21,19 @@ class Calculator extends Component {
           <InputField 
             label="Distance"
             units="miles"
-            value={Number(distance)}
+            value={distance}
             onChange={(val) => this.onChangeHandler('distance', val)}
+            error={error === 'distance'}
           />
           <Divider />
           <InputField
             label="Time"
             units="hours"
-            value={Number(time)}
-            onChange={(val) => this.onChangeHandler('time', val)} />
+            value={time}
+            onChange={(val) => this.onChangeHandler('time', val)} 
+            error={error === 'time'}
+          />
+            
         </FormWrapper>
         <FormWrapper>
           <h1>Speed = {speed}</h1>

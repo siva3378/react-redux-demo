@@ -10,15 +10,14 @@ const InputField = ({
     error,
     errorText
 }) => {
-
-    let onChangeHandler = (e) => {
+    const onChangeHandler = (e) => {
         onChange(e.target.value);
     };
 
     return (<FieldWrapper>
         <Label error={!!error}>{label}</Label>
         <Input
-            type="number"
+            type="text"
             value={value}
             onChange={onChangeHandler}
             error={!!error}
